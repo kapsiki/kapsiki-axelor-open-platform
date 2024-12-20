@@ -36,5 +36,7 @@ export default defineConfig({
   },
   build: {
     target: ["es2022"],
+    outDir: '../../kapsiki-axelor-open-suite-webapp/src/main/webapp',
+    emptyOutDir: false, // also necessary
   },
 });

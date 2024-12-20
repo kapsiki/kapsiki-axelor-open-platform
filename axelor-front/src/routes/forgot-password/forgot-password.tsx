@@ -130,7 +130,7 @@ export function ForgotPassword() {
               e.currentTarget.src = logo;
             }}
           />
-          <Box as="legend" style={{ textWrap: "balance" }}>
+          <Box as="legend" style={{ textWrap: "balance" }} className={styles.title}>
             {i18n.get("Reset your password")}
           </Box>
           {

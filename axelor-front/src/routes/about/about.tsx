@@ -7,6 +7,8 @@ import { dialogs } from "@/components/dialogs";
 import { useRoute } from "@/hooks/use-route";
 import { i18n } from "@/services/client/i18n";
 import { session } from "@/services/client/session";
+import { useSession } from "@/hooks/use-session";
+
 import { usePopupHandlerAtom } from "@/view-containers/view-popup/handler";
 
 import { System } from "../system";
@@ -24,6 +26,8 @@ export function About() {
 
   const popupHandlerAtom = usePopupHandlerAtom();
   const { close: closePopup } = useAtomValue(popupHandlerAtom);
+  const { data } = useSession();
+  const { logo: appLogo, name: appName = "logo" } = data?.application ?? {};
 
   const showSwagger = useCallback(() => {
     closePopup?.();
@@ -40,7 +44,7 @@ export function About() {
   return (
     <Box flex={1} textAlign="center">
       <Box>
-        <Box as={AppLogo} style={{ width: 175, height: 100 }} />
+        {appLogo ? <img src={appLogo} alt={appName} /> : <Box as={AppLogo} style={{ width: 175, height: 100 }} />}
         <h5>
           {app.name} - {app.description}
         </h5>
@@ -53,13 +57,18 @@ export function About() {
         <Box d="flex" g={1} flexDirection="column">
           {app.home && <Link href={app.home}>{i18n.get("Home page")}</Link>}
           {app.help && <Link href={app.help}>{i18n.get("Documentation")}</Link>}
+          {technical && app.swaggerUI?.enabled && (
+            <Button variant="link" onClick={showSwagger}>
+              {i18n.get("API Documentation")}
+            </Button>
+          )}
           <Link href="https://www.gnu.org/licenses/agpl.html">
             {i18n.get("License")}
           </Link>
         </Box>
       </div>
       <Box mt={4}>
-        <h5>Axelor SDK</h5>
+        <h5>{app.name} SDK</h5>
       </Box>
       <div>
         <p>
@@ -71,7 +80,7 @@ export function About() {
             </span>
           )}
         </p>
-
+          {/* 
         <p>Copyright (c) 2005-{year} Axelor. All Rights Reserved.</p>
         <Box d="flex" g={1} flexDirection="column">
           <Link href="https://axelor.com">https://axelor.com</Link>
@@ -92,6 +101,7 @@ export function About() {
             {i18n.get("License")}
           </Link>
         </Box>
+        */}
       </div>
       {technical && (
         <Box mt={3}>

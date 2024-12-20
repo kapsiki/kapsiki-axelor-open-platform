@@ -9,6 +9,7 @@ import { useAppHead } from "@/hooks/use-app-head";
 import { useSession } from "@/hooks/use-session";
 import { i18n } from "@/services/client/i18n";
 import { ClientInfo } from "@/services/client/session";
+import { session } from "@/services/client/session";
 
 import logo from "@/assets/axelor.svg";
 import styles from "./login.module.scss";
@@ -194,7 +195,9 @@ function CentralClient(props: { name: string; title?: string; icon?: string }) {
 
 function ServerError({ error }: { error: string }) {
   const { data } = useSession();
-  const { logo: appLogo = logo, name: appName = "Axelor" } =
+  const { info } = session;
+    const { application: app, user } = info || { application: {}, user: {} };
+  const { logo: appLogo= logo, name: appName = `${app.name}` } =
     data?.application ?? {};
 
   return (
@@ -207,7 +210,7 @@ function ServerError({ error }: { error: string }) {
         alignItems="center"
         p={3}
       >
-        <Image className={styles.logo} src={appLogo} alt={appName} />
+        {appLogo ? <img src={appLogo} alt={appName} /> : <Image className={styles.logo} src={appLogo} alt={appName} />}
         <Alert mt={3} mb={1} p={2} variant="danger">
           {error}
         </Alert>

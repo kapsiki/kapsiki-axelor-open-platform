@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config vite-dev.config.ts",
-    "clean": "rimraf dist",
-    "build": "tsc && vite build",
+    "remove": "rimraf ../../kapsiki-axelor-open-suite-webapp/src/main/webapp/js/libs",
+    "clean-external": "rimraf \"../../kapsiki-axelor-open-suite-webapp/src/main/webapp/js/libs\"",
+    "build": "set NODE_OPTIONS=--max_old_space_size=4096 tsc && vite build && npm run clean-external",
     "build:staging": "tsc && vite build --config vite-staging.config.ts",
     "preview": "vite preview",
     "format": "prettier --write \"**/*.{ts,tsx,md,json,css,scss,html}\"",

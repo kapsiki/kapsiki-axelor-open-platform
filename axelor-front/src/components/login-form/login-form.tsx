@@ -228,6 +228,14 @@ export function LoginForm({
 
   return (
     <Box className={styles.container}>
+      <img
+          className={styles.logo}
+          src={signInLogo}
+          alt={appName}
+          onError={(e) => {
+            e.currentTarget.src = defaultLogo;
+          }}
+        />
       <Box
         className={styles.paper}
         shadow={shadow ? "2xl" : false}
@@ -237,14 +245,6 @@ export function LoginForm({
         p={3}
         mb={3}
       >
-        <img
-          className={styles.logo}
-          src={signInLogo}
-          alt={appName}
-          onError={(e) => {
-            e.currentTarget.src = defaultLogo;
-          }}
-        />
         {isPage && signInTitle && (
           <Box
             d="flex"
@@ -254,7 +254,7 @@ export function LoginForm({
               __html: sanitize(signInTitle),
             }}
           />
-        )}
+        ) || (<span className={styles.signInTitle}>{i18n.get("Sign in")}</span>)}
         <Box as="form" w={100} onSubmit={handleSubmit} mt={3}>
           {isPage && hasTenantSelect && (
             <Box mb={4}>
@@ -365,9 +365,11 @@ export function LoginForm({
         ></Box>
       )}
       {children}
+      {/* 
       <Box mt={3} as="p" textAlign="center">
         {copyright}
       </Box>
+      */}
     </Box>
   );
 }
@@ -450,6 +452,7 @@ function LoginFormButton({
       mt={2}
       w={100}
       gap={4}
+      className={styles.loginButton}
     >
       {icon && <Icon icon={icon} className={styles.icon} />}
       {title}
