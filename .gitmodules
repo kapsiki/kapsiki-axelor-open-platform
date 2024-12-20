@@ -1,0 +1,4 @@
+[submodule "modules/axelor-open-suite"]
+	path = modules/axelor-open-suite
+	url = https://github.com/axelor/axelor-open-suite.git
+	branch = master
