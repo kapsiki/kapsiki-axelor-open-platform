@@ -13,62 +13,62 @@
         <field name="metaFile.sizeText" title="Size" width="80"/>
     </grid>
 
-    <form name="dms-file-form" title="Document" model="com.axelor.dms.db.DMSFile" canNew="false"
-          canAttach="false" canArchive="false" width="large">
+    <form name="dms-file-form" title="Document" model="com.axelor.dms.db.DMSFile" width="large" canNew="false" canArchive="false" canAttach="false">
         <toolbar>
-            <button name="downloadBtn" title="Download" icon="download"
-                    onClick="action-dms-file-download" />
-            <button name="viewRelatedBtn" title="View Related Record" icon="file-text"
-                    showIf="relatedModel != null &amp;&amp; relatedId != 0" onClick="action-dms-file-view-related"/>
+            <button name="downloadBtn" title="Download" icon="download" onClick="action-dms-file-download"/>
         </toolbar>
         <panel name="mainPanel" itemSpan="12">
-            <field name="fileName" title="Name" />
+            <field name="fileName" title="Name"/>
         </panel>
-        <panel name="detailsPanel" title="Details" sidebar="true" readonly="true">
+        <panel name="detailsPanel" title="Details" readonly="true" sidebar="true">
             <field name="fileType" title="Type" showIf="fileType"/>
             <field name="isDirectory" title="Directory" showIf="isDirectory"/>
-            <field name="createdBy" title="Owner" />
-            <field name="createdOn" title="Created" />
-            <field name="updatedOn" title="Modified" />
+            <field name="createdBy" title="Owner"/>
+            <field name="createdOn" title="Created"/>
+            <field name="updatedOn" title="Modified"/>
             <field name="parent" canView="false"/>
-
-            <field name="$relatedToDisplay" title="Related to" showIf="relatedModel != null" readonly="true">
+            <field name="$relatedToDisplay" title="Related to" readonly="true" showIf="relatedModel != null &amp;&amp; !isDirectory">
                 <viewer depends="relatedModel"><![CDATA[
-          <>
-            {record.relatedModel && (() => {
-              const simpleName = record.relatedModel.split('.').pop();
-              const formatted = simpleName.replace(/([a-z])([A-Z])/g, '$1 $2');
-              return <span>{formatted}</span>;
-            })()}
-          </>
-        ]]></viewer>
+        <>
+          {record.relatedModel && (() => {
+            const simpleName = record.relatedModel.split('.').pop();
+            const formatted = simpleName.replace(/([a-z])([A-Z])/g, '$1 $2');
+            return <span>{formatted}</span>;
+          })()}
+        </>
+      ]]></viewer>
             </field>
+        </panel>
+        <panel name="relatedRecordPanel" sidebar="true" showIf="relatedModel != null &amp;&amp; relatedId != 0 &amp;&amp; !isDirectory">
+            <button name="viewRelatedBtn" title="View Related Record"
+                    icon="file-text"
+                    onClick="action-dms-file-view-related"
+                    colSpan="12"/>
         </panel>
         <panel name="tagsPanel" title="Tags" itemSpan="12" sidebar="true">
-            <field name="tags" form-view="dms-tag-form" widget="TagSelect" x-create="code,name"
-                   showTitle="false" />
+            <field name="tags" showTitle="false" widget="TagSelect" form-view="dms-tag-form" x-create="code,name"/>
         </panel>
-        <panel-dashlet action="dms.file.children" showIf="isDirectory" height="400"/>
-        <panel itemSpan="12" showIf="fileType == 'application/pdf'">
+        <panel-dashlet showIf="isDirectory" height="400" action="dms.file.children"/>
+        <panel showIf="fileType == 'application/pdf'" itemSpan="12">
             <field name="$pdf" showTitle="false" readonly="true">
                 <viewer depends="inlineUrl"><![CDATA[
-        <>
-          <Box flexGrow={1} position="relative" style={{ height: 700 }}>
-            {inlineUrl && (
-                <Box as="iframe" src={inlineUrl} h={100} w={100} flex={1}/>
-              )}
-          </Box>
-        </>
-        ]]></viewer>
+      <>
+        <Box flexGrow={1} position="relative" style={{ height: 700 }}>
+          {inlineUrl && (
+              <Box as="iframe" src={inlineUrl} h={100} w={100} flex={1}/>
+            )}
+        </Box>
+      </>
+      ]]></viewer>
             </field>
         </panel>
-        <panel itemSpan="12" showIf="fileType.indexOf('image') == 0">
+        <panel showIf="fileType.indexOf('image') == 0" itemSpan="12">
             <field name="$img" showTitle="false" readonly="true">
                 <viewer depends="inlineUrl,fileName"><![CDATA[
-        <>
-          <Image style={{ width: "100%"}} alt={fileName} src={inlineUrl} />
-        </>
-        ]]></viewer>
+      <>
+        <Image style={{ width: "100%"}} alt={fileName} src={inlineUrl} />
+      </>
+      ]]></viewer>
             </field>
         </panel>
     </form>
